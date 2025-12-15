@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Makermate — AR Learning for Beginner Makers</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --secondary: #8b5cf6;
+            --accent: #ec4899;
+            --text-primary: #0f172a;
+            --text-secondary: #475569;
+            --text-muted: #64748b;
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8fafc;
+            --bg-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --border: #e2e8f0;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.75;
+            color: var(--text-primary);
+            background: var(--bg-secondary);
+            padding: 0;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: var(--bg-primary);
+            padding: 80px 60px;
+            box-shadow: var(--shadow-xl);
+            border-radius: 24px;
+            margin-top: 40px;
+            margin-bottom: 40px;
+        }
+        
+        h1 {
+            font-size: 3.5em;
+            margin-bottom: 16px;
+            color: var(--text-primary);
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            line-height: 1.1;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .subtitle {
+            font-size: 1.35em;
+            color: var(--text-secondary);
+            margin-bottom: 60px;
+            font-weight: 500;
+            line-height: 1.6;
+        }
+        
+        hr {
+            border: none;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--border), transparent);
+            margin: 60px 0;
+        }
+        
+        h2 {
+            font-size: 2.25em;
+            margin-top: 70px;
+            margin-bottom: 24px;
+            color: var(--text-primary);
+            font-weight: 700;
+            letter-spacing: -0.01em;
+            position: relative;
+            padding-left: 20px;
+        }
+        
+        h2::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: linear-gradient(180deg, var(--primary), var(--secondary));
+            border-radius: 2px;
+        }
+        
+        h3 {
+            font-size: 1.5em;
+            margin-top: 40px;
+            margin-bottom: 16px;
+            color: var(--text-primary);
+            font-weight: 600;
+            letter-spacing: -0.01em;
+        }
+        
+        p {
+            margin-bottom: 24px;
+            font-size: 1.1em;
+            color: var(--text-secondary);
+            line-height: 1.8;
+        }
+        
+        ul, ol {
+            margin: 24px 0;
+            padding-left: 32px;
+        }
+        
+        li {
+            margin-bottom: 12px;
+            font-size: 1.1em;
+            color: var(--text-secondary);
+            line-height: 1.8;
+        }
+        
+        blockquote {
+            border-left: 4px solid var(--primary);
+            padding: 20px 24px;
+            margin: 28px 0;
+            background: linear-gradient(90deg, rgba(99, 102, 241, 0.05), transparent);
+            border-radius: 0 12px 12px 0;
+            color: var(--text-primary);
+            font-style: italic;
+            font-size: 1.15em;
+            font-weight: 500;
+            position: relative;
+        }
+        
+        blockquote::before {
+            content: '"';
+            font-size: 4em;
+            position: absolute;
+            left: 12px;
+            top: -10px;
+            color: var(--primary);
+            opacity: 0.2;
+            font-family: Georgia, serif;
+        }
+        
+        strong {
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+        
+        .archetype {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.03), rgba(139, 92, 246, 0.03));
+            padding: 32px;
+            margin: 32px 0;
+            border-radius: 16px;
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        
+        .archetype:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .archetype h3 {
+            color: var(--primary);
+            margin-top: 0;
+        }
+        
+        .archetype blockquote {
+            border-left: none;
+            padding: 0;
+            margin: 16px 0 24px 0;
+            background: none;
+            font-size: 1.3em;
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+        
+        .archetype blockquote::before {
+            display: none;
+        }
+        
+        .footer {
+            margin-top: 80px;
+            padding-top: 40px;
+            border-top: 2px solid var(--border);
+            color: var(--text-muted);
+            font-size: 0.95em;
+        }
+        
+        .footer p {
+            margin: 8px 0;
+            color: var(--text-muted);
+        }
+        
+        .footer em {
+            font-style: normal;
+            font-weight: 500;
+        }
+        
+        img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 40px auto;
+            border-radius: 16px;
+            box-shadow: var(--shadow-lg);
+            border: 1px solid var(--border);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        img:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-xl);
+        }
+        
+        img[alt*="Screen"], img[alt*="screen"] {
+            max-width: 400px;
+            margin: 40px auto;
+        }
+        
+        .prototype-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            margin: 50px 0;
+        }
+        
+        .prototype-grid img {
+            width: 100%;
+            max-width: 100%;
+            margin: 0;
+            border-radius: 16px;
+            box-shadow: var(--shadow-lg);
+            border: 1px solid var(--border);
+        }
+        
+        .prototype-grid img:hover {
+            transform: translateY(-6px) scale(1.02);
+            box-shadow: var(--shadow-xl);
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 40px 24px;
+                border-radius: 0;
+                margin-top: 0;
+                margin-bottom: 0;
+            }
+            
+            h1 {
+                font-size: 2.5em;
+            }
+            
+            h2 {
+                font-size: 1.75em;
+                margin-top: 50px;
+            }
+            
+            h3 {
+                font-size: 1.3em;
+            }
+            
+            .subtitle {
+                font-size: 1.15em;
+            }
+            
+            .prototype-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 16px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .container {
+                padding: 32px 20px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            h2 {
+                font-size: 1.5em;
+            }
+            
+            .prototype-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            img[alt*="Screen"], img[alt*="screen"] {
+                max-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Makermate — AR Learning for Beginner Makers</h1>
+        <p class="subtitle"><strong>Helping students confidently use workshop tools through safe, guided, real-time learning.</strong></p>
+        
+        <hr>
+        
+        <h2>Overview</h2>
+        <p>Makermate is an educational app designed to help beginner makers understand and safely use workshop tools. By scanning a tool with their phone, students can instantly identify its parts, learn what each component does, and follow simple, guided steps to begin using it.</p>
+        <p>The goal was to reduce the emotional and cognitive barriers that stop beginners from trying equipment — empowering learners to move from curiosity to hands-on creation.</p>
+        
+        <hr>
+        
+        <h2>My Role</h2>
+        <h3>Product Designer (End-to-End)</h3>
+        <p>I led the design process across research, strategy, and execution:</p>
+        <ul>
+            <li><strong>User Research & Interviews</strong></li>
+            <li><strong>Archetype Development</strong></li>
+            <li><strong>Journey Mapping & Storyboarding</strong></li>
+            <li><strong>UI/UX Design</strong></li>
+            <li><strong>Paper Prototyping</strong></li>
+            <li><strong>Wizard-of-Oz User Testing</strong></li>
+            <li><strong>High-Fidelity Interaction Design (Figma)</strong></li>
+        </ul>
+        <p>This project strengthened my ability to blend research, visual design, and rapid prototyping into a cohesive product experience.</p>
+        
+        <hr>
+        
+        <h2>Problem Area</h2>
+        <p>Walking into a makerspace can feel overwhelming. Students are surrounded by unfamiliar tools, unclear terminology, and safety procedures they've never been taught. Through research, I found that many students stop at the very first step: approaching a tool they don't understand.</p>
+        <p>Through early interviews, I heard the same concerns repeated:</p>
+        <blockquote>"I don't even know what I'm looking at."</blockquote>
+        <blockquote>"I know this tool is safe if you know how to use it… I don't."</blockquote>
+        <blockquote>"I don't want to ask staff again — it feels embarrassing."</blockquote>
+        <blockquote>"The instructions on the wall are way too long."</blockquote>
+        <p>These emotional barriers — intimidation, confusion, and fear — became the foundation for Makermate.</p>
+        
+        <hr>
+        
+        <h2>Research Approach</h2>
+        <p>To validate the problem and understand the learning context, I conducted:</p>
+        <ul>
+            <li><strong>6 interviews</strong> with beginner/intermediate makers</li>
+            <li><strong>1 interview</strong> with a makerspace manager</li>
+            <li><strong>Field observations</strong> during open lab hours</li>
+            <li><strong>Paper prototype tests</strong> simulating AR labeling and steps</li>
+        </ul>
+        <p>This multi-method approach allowed me to observe both what students said and what they did when interacting with tools.</p>
+        
+        <hr>
+        
+        <h2>Primary Insights</h2>
+        <h3>1. Tool intimidation is real</h3>
+        <p>Beginners often freeze simply because they don't know the names or functions of visible parts.</p>
+        <blockquote>"I want to use it, but I don't know what anything does."</blockquote>
+        
+        <h3>2. Part recognition must come before instruction</h3>
+        <p>Users felt unsafe proceeding when they couldn't identify components like the chuck, trigger, or guard.</p>
+        
+        <h3>3. Long instructions overload beginners</h3>
+        <p>Paragraphs were ignored. Students asked for clarity and immediacy.</p>
+        
+        <h3>4. Students need fast, independent guidance</h3>
+        <p>They don't want to rely on staff for every forgotten step.</p>
+        
+        <h3>5. Confidence is the true barrier</h3>
+        <p>Students weren't incapable — they were unsure.</p>
+        
+        <hr>
+        
+        <h2>Secondary Insights</h2>
+        <p>Two additional research streams shaped the direction:</p>
+        
+        <h3>1. Makerspace Learning Research</h3>
+        <p>Studies show that makerspace users rely heavily on casual peer observation instead of formal instruction. This validated the need for concise, approachable, in-the-moment guidance.</p>
+        
+        <h3>2. AR Learning Literature</h3>
+        <p>AR improves comprehension when teaching complex physical systems because it grounds learning directly on the object. This supported using AR-style part identification as the first step.</p>
+        
+        <hr>
+        
+        <h2>Archetypes</h2>
+        
+        <div class="archetype">
+            <h3>The Hesitant Hare</h3>
+            <blockquote>"I'm scared I'll mess up or get hurt."</blockquote>
+            <p><strong>Needs:</strong></p>
+            <ul>
+                <li>Gentle, non-intimidating guidance</li>
+                <li>A sense of psychological and physical safety</li>
+                <li>Simple explanations before action</li>
+            </ul>
+            <p><strong>Behaviors:</strong></p>
+            <ul>
+                <li>Avoids tools due to unfamiliarity</li>
+                <li>Enters the workshop only when required</li>
+                <li>Freezes around unclear components</li>
+            </ul>
+            <p><strong>Opportunities:</strong></p>
+            <ul>
+                <li>AR part labeling to reduce fear</li>
+                <li>Friendly tone to increase reassurance</li>
+                <li>Clear, gradual steps</li>
+            </ul>
+        </div>
+        
+        <div class="archetype">
+            <h3>The Frustrated Beaver</h3>
+            <blockquote>"Why am I waiting for help? I could figure this out."</blockquote>
+            <p><strong>Needs:</strong></p>
+            <ul>
+                <li>Fast, on-demand information</li>
+                <li>Independence from staff availability</li>
+                <li>Clear instructions to begin immediately</li>
+            </ul>
+            <p><strong>Behaviors:</strong></p>
+            <ul>
+                <li>Gives up when instructors are busy</li>
+                <li>Tries to troubleshoot but lacks key info</li>
+            </ul>
+            <p><strong>Opportunities:</strong></p>
+            <ul>
+                <li>Scan-based instant guidance</li>
+                <li>Structured yet quick steps</li>
+                <li>Actionable flows that support initiative</li>
+            </ul>
+        </div>
+        
+        <hr>
+        
+        <h2>Design Solution</h2>
+        <p>Makermate identifies tools, labels their parts, and teaches students through short, confidence-boosting steps.</p>
+        <p>The app helps students transition from <strong>hesitation → clarity → action → creation</strong>.</p>
+        
+        <hr>
+        
+        <h2>Early Prototyping</h2>
+        <p>I began with paper prototypes to test the core flows:</p>
+        <ul>
+            <li>Simulated tool scanning</li>
+            <li>AR-style part labels</li>
+            <li>One-sentence guided steps</li>
+            <li>A clear "Start Learning" entry point</li>
+        </ul>
+        <p>Using a Wizard-of-Oz method, participants interacted as if using a real AR app while I triggered responses behind the scenes.</p>
+        <p><strong>Participants:</strong> 3–4 beginner makers, ages 18–25.</p>
+        
+        <hr>
+        
+        <h2>Testing Insights</h2>
+        <h3>1. Students needed a clear entry point</h3>
+        <p>They hesitated until they saw a button like "Start Learning".</p>
+        
+        <h3>2. Part labeling was the most valuable feature</h3>
+        <p>Recognition immediately reduced anxiety.</p>
+        
+        <h3>3. One-sentence steps improved comprehension</h3>
+        <p>Users could act quickly without re-reading instructions.</p>
+        
+        <h3>4. Realistic visuals built trust</h3>
+        <p>Stylized graphics caused confusion — users preferred real photos.</p>
+        
+        <h3>5. Students wanted personalization</h3>
+        <p>They asked for a way to save tools, ideas, and projects.</p>
+        
+        <hr>
+        
+        <h2>Design Decisions</h2>
+        <h3>1. Replace long text with simple, one-sentence steps</h3>
+        <p>This drastically reduced cognitive load.</p>
+        
+        <h3>2. Introduce part labeling before any tutorial</h3>
+        <p>Users needed orientation first, actions second.</p>
+        
+        <h3>3. Add a tool gallery for exploration & inspiration</h3>
+        <p>This supports ongoing learning, not just task completion.</p>
+        
+        <h3>4. Use realistic visuals instead of stylized graphics</h3>
+        <p>Visual grounding increased user trust and accuracy.</p>
+        
+        <p>These decisions aligned the experience with the emotional arc of learning:</p>
+        <p><strong>Recognition → Orientation → Action → Confidence</strong></p>
+        
+        <hr>
+        
+        <h2>User Journey Learnings</h2>
+        <p>The biggest friction comes <strong>before</strong> interacting with the tool.</p>
+        <p>Students must first understand:</p>
+        <ul>
+            <li>What they're looking at</li>
+            <li>Which parts matter</li>
+            <li>How the tool safely begins</li>
+        </ul>
+        <p>Once confidence rises, the journey flows smoothly into learning and building.</p>
+        
+        <hr>
+        
+        <h2>Final Prototype</h2>
+        <p>The final Figma prototype delivers a cohesive, intuitive learning flow that brings all research insights together.</p>
+        
+        <h3>What the final prototype includes:</h3>
+        
+        <h3>1. "Scan to Begin" Entry Point</h3>
+        <p>A welcoming, uncluttered start screen that helps reduce hesitation.</p>
+        
+        <h3>2. Tool Identification Screen</h3>
+        <p>A confirmation moment that grounds users before learning begins.</p>
+        
+        <h3>3. AR-Style Part Identification</h3>
+        <p>Floating labels highlight essential parts like the:</p>
+        <ul>
+            <li>Chuck</li>
+            <li>Trigger</li>
+            <li>Speed selector</li>
+            <li>Bit</li>
+            <li>Grip</li>
+        </ul>
+        <p>This step removes unfamiliar terminology as a barrier.</p>
+        
+        <h3>4. One-Sentence Guided Steps</h3>
+        <p>Users swipe through simple, actionable steps such as:</p>
+        <ul>
+            <li>"Insert the drill bit into the chuck."</li>
+            <li>"Tighten the chuck until secure."</li>
+            <li>"Set the speed to low before starting."</li>
+            <li>"Hold steady and drill to depth."</li>
+        </ul>
+        <p>Every step is designed for clarity, confidence, and safety.</p>
+        
+        <h3>Prototype Screens</h3>
+        <div class="prototype-grid">
+            <img src="images/home.png" alt="Home Screen">
+            <img src="images/discovery.png" alt="Discovery Screen">
+            <img src="images/new-tool.png" alt="New Tool Screen">
+            <img src="images/scan.png" alt="Scan Screen">
+            <img src="images/scan2.png" alt="Scan Screen 2">
+            <img src="images/scan3.png" alt="Scan Screen 3">
+        </div>
+        
+        <hr>
+        
+        <h2>Reflection</h2>
+        
+        <h3>What I Would Do Next</h3>
+        <p>With more time and resources, I would:</p>
+        <ul>
+            <li>Build a functional AR prototype in Unity</li>
+            <li>Test with real tools inside the makerspace</li>
+            <li>Expand the tool library (bandsaw, drill press, sander)</li>
+            <li>Add personalized project pathways</li>
+            <li>Explore real-time overlays during tool operation</li>
+        </ul>
+        
+        <h3>What Failed — and What It Taught Me</h3>
+        <p><strong>Long instructions:</strong><br>
+        Users skipped them → Clarity is everything.</p>
+        
+        <p><strong>Stylized graphics:</strong><br>
+        They didn't match real tools → Visual grounding matters.</p>
+        
+        <p><strong>Overambitious AR vision at first:</strong><br>
+        Not technically feasible early on → Balance ambition with reality.</p>
+        
+        <h3>What I Learned</h3>
+        <p>Makermate taught me the value of designing across research, technology, and narrative. Most importantly, it taught me that:</p>
+        <ul>
+            <li><strong>Confidence is a design outcome.</strong></li>
+            <li>A well-designed experience can transform fear into capability.</li>
+            <li>AR should be used with intention, not spectacle.</li>
+            <li>Anchoring information in context can dramatically improve comprehension.</li>
+            <li><strong>Design is emotional.</strong></li>
+        </ul>
+        <p>A learner's confidence arc is as important as the interface itself — "vibecoding" can't manufacture feelings; only intentional design can.</p>
+        
+        <hr>
+        
+        <h2>Final Thoughts</h2>
+        <p>Makermate is more than a tool-learning app — it's a bridge between curiosity and creation. By meeting students in the moment of hesitation and guiding them gently forward, it makes the workshop feel more approachable, inclusive, and empowering.</p>
+        
+        <div class="footer">
+            <p><em>Case Study by Anuj Bhandare</em><br>
+            <em>MA Interaction Design and Interactive Art</em><br>
+            <em>Tools: Figma, Paper Prototyping, User Interviews, Wizard-of-Oz Testing</em></p>
+        </div>
+    </div>
+</body>
+</html>
+
